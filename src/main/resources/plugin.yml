@@ -1,0 +1,60 @@
+name: BMS-ChatManager
+version: '${version}'
+main: net.bms.chatmanager.BMSChatManager
+api-version: "1.13"
+api: "1.13"
+softdepend:
+  - LuckPerms
+  - PlaceholderAPI
+commands:
+  chatmanager:
+    description: Main command for BMS-ChatManager
+    aliases: [chat, bmschat, cm]
+  staffchat:
+    description: Toggle staff chat
+    aliases: [sc]
+    permission: chatmanager.staff
+  adminchat:
+    description: Toggle admin chat
+    aliases: [ac]
+    permission: chatmanager.admin
+  channel:
+    description: Switch chat channels
+    aliases: [ch]
+  msg:
+    description: Send a private message
+    aliases: [w, tell, pm]
+  reply:
+    description: Reply to a private message
+    aliases: [r]
+  ignore:
+    description: Ignore a player
+  unignore:
+    description: Unignore a player
+  ignorelist:
+    description: List ignored players
+  clearchat:
+    description: Clear the chat
+    aliases: [cc]
+    permission: chatmanager.admin
+  mutechat:
+    description: Mute global chat
+    permission: chatmanager.admin
+  unmutechat:
+    description: Unmute global chat
+    permission: chatmanager.admin
+  slowchat:
+    description: Slow down global chat
+    permission: chatmanager.admin
+  unslowchat:
+    description: Remove slow mode
+    permission: chatmanager.admin
+  announce:
+    description: Send an announcement
+    aliases: [broadcast, bc]
+    permission: chatmanager.admin
+  rules:
+    description: View server rules
+  history:
+    description: View chat history
+    permission: chatmanager.history
