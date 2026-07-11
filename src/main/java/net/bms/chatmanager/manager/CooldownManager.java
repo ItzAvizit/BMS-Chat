@@ -1,7 +1,7 @@
 package net.bms.chatmanager.manager;
 
 import net.bms.chatmanager.BMSChatManager;
-import org.bukkit.configuration.ConfigurationSection;
+
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
