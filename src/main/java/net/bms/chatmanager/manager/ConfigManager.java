@@ -8,6 +8,8 @@ public class ConfigManager {
     private final Plugin plugin;
     
     private ConfigWrapper mainConfig;
+    private ConfigWrapper messagesConfig;
+    private ConfigWrapper swearWordsConfig;
 
     public ConfigManager(Plugin plugin) {
         this.plugin = plugin;
@@ -17,7 +19,15 @@ public class ConfigManager {
     public void loadAll() {
         mainConfig = new ConfigWrapper(plugin, "config.yml");
         mainConfig.reloadConfig();
+
+        messagesConfig = new ConfigWrapper(plugin, "messages.yml");
+        messagesConfig.reloadConfig();
+
+        swearWordsConfig = new ConfigWrapper(plugin, "swear_words.yml");
+        swearWordsConfig.reloadConfig();
     }
 
     public ConfigWrapper getMain() { return mainConfig; }
+    public ConfigWrapper getMessages() { return messagesConfig; }
+    public ConfigWrapper getSwearWords() { return swearWordsConfig; }
 }

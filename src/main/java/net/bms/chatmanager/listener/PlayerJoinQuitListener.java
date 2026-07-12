@@ -19,7 +19,7 @@ public class PlayerJoinQuitListener implements Listener {
     @SuppressWarnings("deprecation")
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
-        String format = plugin.getConfigManager().getMain().getConfig().getString("messages.join_message");
+        String format = plugin.getConfigManager().getMessages().getConfig().getString("messages.join_message");
         if (format != null && !format.isEmpty()) {
             Component msg = plugin.getFormatManager().formatMessage(event.getPlayer(), "", format);
             event.setJoinMessage(null);
@@ -32,7 +32,7 @@ public class PlayerJoinQuitListener implements Listener {
     @SuppressWarnings("deprecation")
     @EventHandler
     public void onQuit(PlayerQuitEvent event) {
-        String format = plugin.getConfigManager().getMain().getConfig().getString("messages.quit_message");
+        String format = plugin.getConfigManager().getMessages().getConfig().getString("messages.quit_message");
         if (format != null && !format.isEmpty()) {
             Component msg = plugin.getFormatManager().formatMessage(event.getPlayer(), "", format);
             event.setQuitMessage(null);

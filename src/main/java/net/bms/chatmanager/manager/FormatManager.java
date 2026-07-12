@@ -97,8 +97,41 @@ public class FormatManager {
         format = format.replace("<message>", "<message_placeholder>");
         format = format.replace("<player>", "<player_placeholder>");
 
-        Component messageComponent = CC.parse(message);
+        // Handle [item]
+        String messageStr = message;
+        net.kyori.adventure.text.minimessage.tag.resolver.TagResolver itemResolver = net.kyori.adventure.text.minimessage.tag.resolver.TagResolver.empty();
+        if (messageStr.contains("[item]") && player.hasPermission("chatmanager.item")) {
+            org.bukkit.inventory.ItemStack item = player.getInventory().getItemInMainHand();
+            if (item != null && !item.getType().isAir()) {
+                messageStr = messageStr.replace("[item]", "<item>");
+                
+                Component itemComponent = net.kyori.adventure.text.Component.text("[")
+                        .append(net.kyori.adventure.text.Component.translatable(item.getType().translationKey()))
+                        .append(net.kyori.adventure.text.Component.text("]"))
+                        .color(net.kyori.adventure.text.format.NamedTextColor.AQUA)
+                        .hoverEvent(item.asHoverEvent());
+                        
+                itemResolver = Placeholder.component("item", itemComponent);
+            }
+        }
+
+        String convertedMessage = CC.convertLegacyToMiniMessage(messageStr);
+        Component messageComponent = MiniMessage.miniMessage().deserialize(convertedMessage, itemResolver);
+
         Component playerComponent = CC.parse(player.getName()); // Could include prefix later if needed
+        
+        boolean interactiveEnabled = configManager.getMain().getConfig().getBoolean("interactive.enabled", true);
+        if (interactiveEnabled) {
+            String hoverText = configManager.getMain().getConfig().getString("interactive.hover_text", "<gray>Click to message </gray><white>%player_name%</white>!");
+            hoverText = hoverText.replace("%player_name%", player.getName());
+            
+            String clickCommand = configManager.getMain().getConfig().getString("interactive.click_command", "/msg %player_name% ");
+            clickCommand = clickCommand.replace("%player_name%", player.getName());
+            
+            playerComponent = playerComponent
+                .hoverEvent(net.kyori.adventure.text.event.HoverEvent.showText(CC.parse(hoverText)))
+                .clickEvent(net.kyori.adventure.text.event.ClickEvent.suggestCommand(clickCommand));
+        }
 
         // Re-parse the format string into a component, safely injecting the player and message
         String finalFormat = CC.convertLegacyToMiniMessage(format);

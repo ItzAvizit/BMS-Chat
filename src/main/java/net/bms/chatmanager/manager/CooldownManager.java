@@ -28,6 +28,9 @@ public class CooldownManager {
     }
 
     public int getCooldownForPlayer(Player player) {
+        if (!configManager.getMain().getConfig().getBoolean("cooldowns.enabled", true)) return 0;
+        if (player == null) return 0; // Discord users don't have in-game cooldowns applied here
+
         if (player.hasPermission(configManager.getMain().getConfig().getString("permissions.bypasscooldown", "chatmanager.bypasscooldown"))) {
             return 0;
         }
@@ -49,6 +52,8 @@ public class CooldownManager {
     }
 
     public long getRemainingCooldown(Player player) {
+        if (player == null) return 0;
+
         int cd = getCooldownForPlayer(player);
         if (cd <= 0) return 0;
 
@@ -62,6 +67,8 @@ public class CooldownManager {
     }
 
     public void updateChatTime(Player player) {
-        lastChatTimes.put(player.getUniqueId(), System.currentTimeMillis());
+        if (player != null) {
+            lastChatTimes.put(player.getUniqueId(), System.currentTimeMillis());
+        }
     }
 }

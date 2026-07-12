@@ -11,6 +11,7 @@ public class PlayerDataManager {
     
     // Simplistic storage in memory for now. In a real scenario, this would sync to YAML/SQL.
     private final Set<UUID> spyingPlayers = new HashSet<>();
+    private final Set<UUID> socialSpies = new HashSet<>();
     private final Map<UUID, Set<UUID>> ignoredPlayers = new HashMap<>();
     private final Map<UUID, UUID> lastConversations = new HashMap<>();
 
@@ -30,6 +31,24 @@ public class PlayerDataManager {
     
     public Set<UUID> getSpyingPlayers() {
         return spyingPlayers;
+    }
+
+    public boolean toggleSocialSpy(Player player) {
+        if (socialSpies.contains(player.getUniqueId())) {
+            socialSpies.remove(player.getUniqueId());
+            return false;
+        } else {
+            socialSpies.add(player.getUniqueId());
+            return true;
+        }
+    }
+
+    public boolean isSocialSpy(Player player) {
+        return socialSpies.contains(player.getUniqueId());
+    }
+    
+    public Set<UUID> getSocialSpies() {
+        return socialSpies;
     }
 
     public void ignorePlayer(Player player, Player target) {

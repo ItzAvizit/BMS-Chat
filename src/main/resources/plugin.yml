@@ -6,6 +6,7 @@ api: "1.13"
 softdepend:
   - LuckPerms
   - PlaceholderAPI
+  - DiscordSRV
 commands:
   chatmanager:
     description: Main command for BMS-ChatManager

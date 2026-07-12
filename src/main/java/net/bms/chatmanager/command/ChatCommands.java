@@ -32,12 +32,12 @@ public class ChatCommands implements CommandExecutor, TabCompleter {
             case "chatmanager":
                 if (args.length > 0 && args[0].equalsIgnoreCase("reload")) {
                     if (!sender.hasPermission("chatmanager.reload")) {
-                        plugin.getAdventureManager().sendMessage(sender, CC.parse(plugin.getConfigManager().getMain().getConfig().getString("messages.no_permission")));
+                        plugin.getAdventureManager().sendMessage(sender, CC.parse(plugin.getConfigManager().getMessages().getConfig().getString("messages.no_permission")));
                         return true;
                     }
                     plugin.getConfigManager().loadAll();
                     plugin.getChannelManager().loadChannels();
-                    plugin.getAdventureManager().sendMessage(sender, CC.parse(plugin.getConfigManager().getMain().getConfig().getString("messages.reload_success")));
+                    plugin.getAdventureManager().sendMessage(sender, CC.parse(plugin.getConfigManager().getMessages().getConfig().getString("messages.reload_success")));
                     return true;
                 }
                 plugin.getAdventureManager().sendMessage(sender, CC.parse("\n<gradient:#00c6ff:#0072ff><bold>BMS-ChatManager Commands</bold></gradient> <gray>(v" + plugin.getDescription().getVersion() + ")</gray>"));
@@ -57,7 +57,8 @@ public class ChatCommands implements CommandExecutor, TabCompleter {
                     "/unmutechat: Unmute the global chat.",
                     "/slowchat <seconds>: Slow down global chat.",
                     "/unslowchat: Remove slow mode.",
-                    "/announce <message>: Send a global announcement."
+                    "/announce <message>: Send a global announcement.",
+                    "/socialspy: Toggle private message spying."
                 };
                 
                 for (String helpCmd : helpCommands) {
@@ -77,16 +78,16 @@ public class ChatCommands implements CommandExecutor, TabCompleter {
                 if (sender instanceof Player) {
                     Player p = (Player) sender;
                     if (!p.hasPermission("chatmanager.staff")) {
-                        plugin.getAdventureManager().sendMessage(p, CC.parse(plugin.getConfigManager().getMain().getConfig().getString("messages.no_permission")));
+                        plugin.getAdventureManager().sendMessage(p, CC.parse(plugin.getConfigManager().getMessages().getConfig().getString("messages.no_permission")));
                         return true;
                     }
                     ChatChannel current = plugin.getChannelManager().getPlayerChannel(p);
                     if (current != null && current.getName().equalsIgnoreCase("staff")) {
                         plugin.getChannelManager().setPlayerChannel(p, "global");
-                        plugin.getAdventureManager().sendMessage(p, CC.parse(plugin.getConfigManager().getMain().getConfig().getString("messages.channel_leave").replace("%channel%", "Staff")));
+                        plugin.getAdventureManager().sendMessage(p, CC.parse(plugin.getConfigManager().getMessages().getConfig().getString("messages.channel_leave").replace("%channel%", "Staff")));
                     } else {
                         plugin.getChannelManager().setPlayerChannel(p, "staff");
-                        plugin.getAdventureManager().sendMessage(p, CC.parse(plugin.getConfigManager().getMain().getConfig().getString("messages.channel_join").replace("%channel%", "Staff")));
+                        plugin.getAdventureManager().sendMessage(p, CC.parse(plugin.getConfigManager().getMessages().getConfig().getString("messages.channel_join").replace("%channel%", "Staff")));
                     }
                 }
                 return true;
@@ -95,16 +96,16 @@ public class ChatCommands implements CommandExecutor, TabCompleter {
                 if (sender instanceof Player) {
                     Player p = (Player) sender;
                     if (!p.hasPermission("chatmanager.admin")) {
-                        plugin.getAdventureManager().sendMessage(p, CC.parse(plugin.getConfigManager().getMain().getConfig().getString("messages.no_permission")));
+                        plugin.getAdventureManager().sendMessage(p, CC.parse(plugin.getConfigManager().getMessages().getConfig().getString("messages.no_permission")));
                         return true;
                     }
                     ChatChannel current = plugin.getChannelManager().getPlayerChannel(p);
                     if (current != null && current.getName().equalsIgnoreCase("admin")) {
                         plugin.getChannelManager().setPlayerChannel(p, "global");
-                        plugin.getAdventureManager().sendMessage(p, CC.parse(plugin.getConfigManager().getMain().getConfig().getString("messages.channel_leave").replace("%channel%", "Admin")));
+                        plugin.getAdventureManager().sendMessage(p, CC.parse(plugin.getConfigManager().getMessages().getConfig().getString("messages.channel_leave").replace("%channel%", "Admin")));
                     } else {
                         plugin.getChannelManager().setPlayerChannel(p, "admin");
-                        plugin.getAdventureManager().sendMessage(p, CC.parse(plugin.getConfigManager().getMain().getConfig().getString("messages.channel_join").replace("%channel%", "Admin")));
+                        plugin.getAdventureManager().sendMessage(p, CC.parse(plugin.getConfigManager().getMessages().getConfig().getString("messages.channel_join").replace("%channel%", "Admin")));
                     }
                 }
                 return true;
@@ -118,11 +119,11 @@ public class ChatCommands implements CommandExecutor, TabCompleter {
                         return true;
                     }
                     if (!target.getPermission().isEmpty() && !p.hasPermission(target.getPermission())) {
-                        plugin.getAdventureManager().sendMessage(p, CC.parse(plugin.getConfigManager().getMain().getConfig().getString("messages.no_permission")));
+                        plugin.getAdventureManager().sendMessage(p, CC.parse(plugin.getConfigManager().getMessages().getConfig().getString("messages.no_permission")));
                         return true;
                     }
                     plugin.getChannelManager().setPlayerChannel(p, target.getName());
-                    plugin.getAdventureManager().sendMessage(p, CC.parse(plugin.getConfigManager().getMain().getConfig().getString("messages.channel_join").replace("%channel%", target.getName())));
+                    plugin.getAdventureManager().sendMessage(p, CC.parse(plugin.getConfigManager().getMessages().getConfig().getString("messages.channel_join").replace("%channel%", target.getName())));
                 }
                 return true;
 
@@ -134,7 +135,7 @@ public class ChatCommands implements CommandExecutor, TabCompleter {
                         }
                     }
                 }
-                String msg = plugin.getConfigManager().getMain().getConfig().getString("messages.chat_cleared").replace("%player_name%", sender.getName());
+                String msg = plugin.getConfigManager().getMessages().getConfig().getString("messages.chat_cleared").replace("%player_name%", sender.getName());
                 for (Player p : Bukkit.getOnlinePlayers()) {
                     plugin.getAdventureManager().sendMessage(p, CC.parse(msg));
                 }
@@ -169,7 +170,7 @@ public class ChatCommands implements CommandExecutor, TabCompleter {
                     Player p = (Player) sender;
                     Player target = Bukkit.getPlayer(args[0]);
                     if (target == null) {
-                        plugin.getAdventureManager().sendMessage(p, CC.parse(plugin.getConfigManager().getMain().getConfig().getString("messages.player_not_found")));
+                        plugin.getAdventureManager().sendMessage(p, CC.parse(plugin.getConfigManager().getMessages().getConfig().getString("messages.player_not_found")));
                         return true;
                     }
                     if (plugin.getPlayerDataManager().isIgnoring(target, p)) {
@@ -182,15 +183,24 @@ public class ChatCommands implements CommandExecutor, TabCompleter {
                     
                     plugin.getPlayerDataManager().setReplyTarget(p, target);
                     
-                    String sFormat = plugin.getConfigManager().getMain().getConfig().getString("messages.msg_format_send")
+                    String sFormat = plugin.getConfigManager().getMessages().getConfig().getString("messages.msg_format_send")
                         .replace("%player%", target.getName())
                         .replace("%message%", pmsg);
-                    String rFormat = plugin.getConfigManager().getMain().getConfig().getString("messages.msg_format_receive")
+                    String rFormat = plugin.getConfigManager().getMessages().getConfig().getString("messages.msg_format_receive")
                         .replace("%player%", p.getName())
                         .replace("%message%", pmsg);
                         
                     plugin.getAdventureManager().sendMessage(p, CC.parse(sFormat));
                     plugin.getAdventureManager().sendMessage(target, CC.parse(rFormat));
+                    
+                    // Social Spy
+                    String spyFormat = "<gray>[SocialSpy] [" + p.getName() + " -> " + target.getName() + "] " + pmsg + "</gray>";
+                    for (UUID spyId : plugin.getPlayerDataManager().getSocialSpies()) {
+                        Player spy = Bukkit.getPlayer(spyId);
+                        if (spy != null && !spy.equals(p) && !spy.equals(target)) {
+                            plugin.getAdventureManager().sendMessage(spy, CC.parse(spyFormat));
+                        }
+                    }
                 }
                 return true;
 
@@ -204,22 +214,31 @@ public class ChatCommands implements CommandExecutor, TabCompleter {
                     }
                     Player target = Bukkit.getPlayer(targetId);
                     if (target == null) {
-                        plugin.getAdventureManager().sendMessage(p, CC.parse(plugin.getConfigManager().getMain().getConfig().getString("messages.player_not_found")));
+                        plugin.getAdventureManager().sendMessage(p, CC.parse(plugin.getConfigManager().getMessages().getConfig().getString("messages.player_not_found")));
                         return true;
                     }
                     
                     String pmsg = String.join(" ", args);
                     plugin.getPlayerDataManager().setReplyTarget(p, target);
                     
-                    String sFormat = plugin.getConfigManager().getMain().getConfig().getString("messages.msg_format_send")
+                    String sFormat = plugin.getConfigManager().getMessages().getConfig().getString("messages.msg_format_send")
                         .replace("%player%", target.getName())
                         .replace("%message%", pmsg);
-                    String rFormat = plugin.getConfigManager().getMain().getConfig().getString("messages.msg_format_receive")
+                    String rFormat = plugin.getConfigManager().getMessages().getConfig().getString("messages.msg_format_receive")
                         .replace("%player%", p.getName())
                         .replace("%message%", pmsg);
                         
                     plugin.getAdventureManager().sendMessage(p, CC.parse(sFormat));
                     plugin.getAdventureManager().sendMessage(target, CC.parse(rFormat));
+                    
+                    // Social Spy
+                    String spyFormat = "<gray>[SocialSpy] [" + p.getName() + " -> " + target.getName() + "] " + pmsg + "</gray>";
+                    for (UUID spyId : plugin.getPlayerDataManager().getSocialSpies()) {
+                        Player spy = Bukkit.getPlayer(spyId);
+                        if (spy != null && !spy.equals(p) && !spy.equals(target)) {
+                            plugin.getAdventureManager().sendMessage(spy, CC.parse(spyFormat));
+                        }
+                    }
                 }
                 return true;
                 
@@ -228,15 +247,15 @@ public class ChatCommands implements CommandExecutor, TabCompleter {
                     Player p = (Player) sender;
                     Player target = Bukkit.getPlayer(args[0]);
                     if (target == null) {
-                        plugin.getAdventureManager().sendMessage(p, CC.parse(plugin.getConfigManager().getMain().getConfig().getString("messages.player_not_found")));
+                        plugin.getAdventureManager().sendMessage(p, CC.parse(plugin.getConfigManager().getMessages().getConfig().getString("messages.player_not_found")));
                         return true;
                     }
                     if (target.equals(p)) {
-                        plugin.getAdventureManager().sendMessage(p, CC.parse(plugin.getConfigManager().getMain().getConfig().getString("messages.cannot_ignore_self")));
+                        plugin.getAdventureManager().sendMessage(p, CC.parse(plugin.getConfigManager().getMessages().getConfig().getString("messages.cannot_ignore_self")));
                         return true;
                     }
                     plugin.getPlayerDataManager().ignorePlayer(p, target);
-                    plugin.getAdventureManager().sendMessage(p, CC.parse(plugin.getConfigManager().getMain().getConfig().getString("messages.ignore_add").replace("%player%", target.getName())));
+                    plugin.getAdventureManager().sendMessage(p, CC.parse(plugin.getConfigManager().getMessages().getConfig().getString("messages.ignore_add").replace("%player%", target.getName())));
                 }
                 return true;
                 
@@ -245,16 +264,16 @@ public class ChatCommands implements CommandExecutor, TabCompleter {
                     Player p = (Player) sender;
                     Player target = Bukkit.getPlayer(args[0]);
                     if (target == null) {
-                        plugin.getAdventureManager().sendMessage(p, CC.parse(plugin.getConfigManager().getMain().getConfig().getString("messages.player_not_found")));
+                        plugin.getAdventureManager().sendMessage(p, CC.parse(plugin.getConfigManager().getMessages().getConfig().getString("messages.player_not_found")));
                         return true;
                     }
                     plugin.getPlayerDataManager().unignorePlayer(p, target);
-                    plugin.getAdventureManager().sendMessage(p, CC.parse(plugin.getConfigManager().getMain().getConfig().getString("messages.ignore_remove").replace("%player%", target.getName())));
+                    plugin.getAdventureManager().sendMessage(p, CC.parse(plugin.getConfigManager().getMessages().getConfig().getString("messages.ignore_remove").replace("%player%", target.getName())));
                 }
                 return true;
             case "slowchat":
                 if (!sender.hasPermission("chatmanager.admin")) {
-                    plugin.getAdventureManager().sendMessage(sender, CC.parse(plugin.getConfigManager().getMain().getConfig().getString("messages.no_permission")));
+                    plugin.getAdventureManager().sendMessage(sender, CC.parse(plugin.getConfigManager().getMessages().getConfig().getString("messages.no_permission")));
                     return true;
                 }
                 if (args.length == 0) {
@@ -272,11 +291,27 @@ public class ChatCommands implements CommandExecutor, TabCompleter {
 
             case "unslowchat":
                 if (!sender.hasPermission("chatmanager.admin")) {
-                    plugin.getAdventureManager().sendMessage(sender, CC.parse(plugin.getConfigManager().getMain().getConfig().getString("messages.no_permission")));
+                    plugin.getAdventureManager().sendMessage(sender, CC.parse(plugin.getConfigManager().getMessages().getConfig().getString("messages.no_permission")));
                     return true;
                 }
                 plugin.getCooldownManager().setGlobalSlowchat(0);
                 plugin.getAdventureManager().sendMessage(sender, CC.parse("<green>Global chat slow mode has been removed.</green>"));
+                return true;
+                
+            case "socialspy":
+                if (sender instanceof Player) {
+                    Player p = (Player) sender;
+                    if (!p.hasPermission("chatmanager.socialspy")) {
+                        plugin.getAdventureManager().sendMessage(p, CC.parse(plugin.getConfigManager().getMessages().getConfig().getString("messages.no_permission")));
+                        return true;
+                    }
+                    boolean enabled = plugin.getPlayerDataManager().toggleSocialSpy(p);
+                    if (enabled) {
+                        plugin.getAdventureManager().sendMessage(p, CC.parse("<green>Social Spy enabled.</green>"));
+                    } else {
+                        plugin.getAdventureManager().sendMessage(p, CC.parse("<yellow>Social Spy disabled.</yellow>"));
+                    }
+                }
                 return true;
         }
         return false;

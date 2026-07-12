@@ -12,6 +12,7 @@ repositories {
     maven("https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
     maven("https://oss.sonatype.org/content/groups/public/")
     maven("https://repo.extendedclip.com/content/repositories/placeholderapi/")
+    maven("https://nexus.scarsz.me/content/groups/public/")
 }
 
 dependencies {
@@ -23,6 +24,9 @@ dependencies {
     
     // LuckPerms
     compileOnly("net.luckperms:api:5.4")
+    
+    // DiscordSRV
+    compileOnly("com.discordsrv:discordsrv:1.28.0")
     
     // Adventure API & MiniMessage
     implementation("net.kyori:adventure-api:4.16.0")

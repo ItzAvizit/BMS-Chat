@@ -29,7 +29,7 @@ public class AsyncChatListenerLegacy implements Listener {
 
         // 1. Mute Check
         if (plugin.isChatMuted() && !player.hasPermission("chatmanager.bypassmute")) {
-            plugin.getAdventureManager().sendMessage(player, CC.parse(plugin.getConfigManager().getMain().getConfig().getString("messages.chat_muted")));
+            plugin.getAdventureManager().sendMessage(player, CC.parse(plugin.getConfigManager().getMessages().getConfig().getString("messages.chat_muted")));
             event.setCancelled(true);
             return;
         }
@@ -37,7 +37,7 @@ public class AsyncChatListenerLegacy implements Listener {
         // 2. Cooldown Check
         long cd = plugin.getCooldownManager().getRemainingCooldown(player);
         if (cd > 0) {
-            String msg = plugin.getConfigManager().getMain().getConfig().getString("messages.cooldown_active").replace("%time%", String.valueOf(cd));
+            String msg = plugin.getConfigManager().getMessages().getConfig().getString("messages.cooldown_active").replace("%time%", String.valueOf(cd));
             plugin.getAdventureManager().sendMessage(player, CC.parse(msg));
             event.setCancelled(true);
             return;
@@ -55,8 +55,14 @@ public class AsyncChatListenerLegacy implements Listener {
             return;
         }
 
+        // Auto-Grammar
+        message = plugin.getGrammarManager().applyGrammar(message);
+
         // Filter profanity
+        String preFilterMessage = message;
         message = plugin.getFilterManager().filterMessage(player, message);
+        boolean wasFiltered = !preFilterMessage.equals(message);
+        
         plugin.getFilterManager().logMessage(player, message);
         plugin.getCooldownManager().updateChatTime(player);
 
@@ -78,10 +84,19 @@ public class AsyncChatListenerLegacy implements Listener {
         // Format message
         Component finalMessage = plugin.getFormatManager().formatMessage(player, message, channel.getFormat());
 
-        // Cancel standard chat and send via Adventure
-        event.setCancelled(true);
+        // Save a copy of the recipients who should receive the message
+        java.util.Set<Player> finalRecipients = new java.util.HashSet<>(event.getRecipients());
 
-        for (Player recipient : event.getRecipients()) {
+        // Stop DiscordSRV from sending swear words by cancelling the event if it was filtered!
+        if (wasFiltered) {
+            event.setCancelled(true);
+        } else {
+            // Cancel standard chat display but DO NOT cancel the event itself.
+            // This allows DiscordSRV to process the native event without us interfering!
+            event.getRecipients().clear();
+        }
+
+        for (Player recipient : finalRecipients) {
             plugin.getAdventureManager().sendMessage(recipient, finalMessage);
         }
 
@@ -92,10 +107,15 @@ public class AsyncChatListenerLegacy implements Listener {
         if (!channel.getName().equalsIgnoreCase("global")) {
             for (UUID spyId : plugin.getPlayerDataManager().getSpyingPlayers()) {
                 Player spy = Bukkit.getPlayer(spyId);
-                if (spy != null && !event.getRecipients().contains(spy)) {
+                if (spy != null && !finalRecipients.contains(spy)) {
                     plugin.getAdventureManager().sendMessage(spy, CC.parse("<gray>[Spy]</gray> ").append(finalMessage));
                 }
             }
         }
+        
+        // Log Chat
+        plugin.getLogManager().logChat(channel.getName(), player, message);
+
+        // (Removed manual sendToDiscord to allow DiscordSRV to process the event naturally)
     }
 }

@@ -19,9 +19,14 @@ public class BMSChatManager extends JavaPlugin {
     private CooldownManager cooldownManager;
     private PlayerDataManager playerDataManager;
     private MentionManager mentionManager;
+    private WebhookManager webhookManager;
+    private LogManager logManager;
+    private AnnouncerManager announcerManager;
+    private GrammarManager grammarManager;
 
     private LuckPermsHook luckPermsHook;
     private PlaceholderAPIHook placeholderAPIHook;
+    private DiscordSRVHook discordSRVHook;
 
     private boolean chatMuted = false;
 
@@ -42,6 +47,7 @@ public class BMSChatManager extends JavaPlugin {
         // Initialize Integrations
         luckPermsHook = new LuckPermsHook(this);
         placeholderAPIHook = new PlaceholderAPIHook(this);
+        discordSRVHook = new DiscordSRVHook(this);
 
         // Initialize Managers
         adventureManager = new AdventureManager(this);
@@ -52,6 +58,10 @@ public class BMSChatManager extends JavaPlugin {
         cooldownManager = new CooldownManager(this, configManager);
         playerDataManager = new PlayerDataManager();
         mentionManager = new MentionManager(this);
+        webhookManager = new WebhookManager(this);
+        logManager = new LogManager(this);
+        announcerManager = new AnnouncerManager(this);
+        grammarManager = new GrammarManager(this);
 
         // Register Listeners
         getServer().getPluginManager().registerEvents(new net.bms.chatmanager.listener.AsyncChatListenerLegacy(this), this);
@@ -79,6 +89,9 @@ public class BMSChatManager extends JavaPlugin {
         if (adventureManager != null) {
             adventureManager.close();
         }
+        if (discordSRVHook != null) {
+            discordSRVHook.unregister();
+        }
         getLogger().info("BMS-ChatManager has been disabled!");
     }
 
@@ -95,6 +108,11 @@ public class BMSChatManager extends JavaPlugin {
     public CooldownManager getCooldownManager() { return cooldownManager; }
     public PlayerDataManager getPlayerDataManager() { return playerDataManager; }
     public MentionManager getMentionManager() { return mentionManager; }
+    public WebhookManager getWebhookManager() { return webhookManager; }
+    public LogManager getLogManager() { return logManager; }
+    public AnnouncerManager getAnnouncerManager() { return announcerManager; }
+    public GrammarManager getGrammarManager() { return grammarManager; }
+    public DiscordSRVHook getDiscordSRVHook() { return discordSRVHook; }
 
     public boolean isChatMuted() { return chatMuted; }
     public void setChatMuted(boolean chatMuted) { this.chatMuted = chatMuted; }

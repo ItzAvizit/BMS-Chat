@@ -47,21 +47,24 @@ filter:
   enabled: true
   # What to replace bad words with
   replace_with: "***"
-  # List of bad words to filter out
-  blocked_words:
-    - "fuck"
-    - "shit"
-    - "bitch"
-    - "asshole"
-    - "cunt"
-    - "dick"
-    - "pussy"
-    - "bastard"
-    - "slut"
-    - "whore"
-    - "faggot"
-    - "nigger"
-    - "nigga"
+  # Action to take when a player swears (none, warn, mute, kick)
+  enforcement_action: "warn"
+  # Note: The list of blocked words is now located in swear_words.yml!
+
+# ------------------------------------------
+# Discord Integration
+# ------------------------------------------
+discord:
+  enabled: true
+  # Set to true to send chat to Discord via DiscordSRV
+  sync_chat: true
+  # Channel routing (In-Game Channel -> Discord Channel Name)
+  channels:
+    global: "global"
+    staff: "staff-chat"
+    admin: "admin-chat"
+  # Webhook URL for rich embeds (leave blank to disable)
+  webhook_url: ""
 
 # ------------------------------------------
 # Anti-Spam
@@ -93,6 +96,7 @@ ads:
 # Chat Cooldowns
 # ------------------------------------------
 cooldowns:
+  enabled: true
   default: 3
   vip: 1
 
@@ -119,23 +123,43 @@ permissions:
   gradient: "chatmanager.gradient"
 
 # ------------------------------------------
-# Messages
+# Grammar & Auto-Capitalization
 # ------------------------------------------
-messages:
-  prefix: "<gradient:#00c6ff:#0072ff>BMS-Chat</gradient> <gray>»</gray> "
-  no_permission: "<red>You do not have permission to do this.</red>"
-  reload_success: "<green>Successfully reloaded configuration!</green>"
-  chat_muted: "<red>The chat is currently muted.</red>"
-  chat_cleared: "<green>The chat has been cleared by %player_name%!</green>"
-  cooldown_active: "<red>Please wait %time% seconds before chatting again.</red>"
-  player_not_found: "<red>Player not found.</red>"
-  player_ignored: "<red>You are ignoring this player.</red>"
-  cannot_ignore_self: "<red>You cannot ignore yourself.</red>"
-  ignore_add: "<green>You are now ignoring %player%.</green>"
-  ignore_remove: "<green>You are no longer ignoring %player%.</green>"
-  msg_format_send: "<gray>[Me -> %player%] %message%</gray>"
-  msg_format_receive: "<gray>[%player% -> Me] %message%</gray>"
-  channel_join: "<green>You have joined the %channel% channel.</green>"
-  channel_leave: "<yellow>You have left the %channel% channel.</yellow>"
-  join_message: "<yellow>%player_name% joined the game.</yellow>"
-  quit_message: "<yellow>%player_name% left the game.</yellow>"
+grammar:
+  enabled: true
+  # Automatically capitalize the first letter of messages
+  capitalize: true
+  # Automatically add a period to the end of messages if missing
+  punctuation: true
+
+# ------------------------------------------
+# Local Chat Logging
+# ------------------------------------------
+logs:
+  # Enable saving chat messages to plugins/BMS-ChatManager/logs/
+  enabled: true
+
+# ------------------------------------------
+# Interactive Chat (Hover & Click)
+# ------------------------------------------
+interactive:
+  enabled: true
+  # The text shown when a player hovers over someone's name in chat
+  hover_text: "<gray>Click to message </gray><white>%player_name%</white>!"
+  # The command suggested when clicking a player's name
+  click_command: "/msg %player_name% "
+
+# ------------------------------------------
+# Auto-Announcer (Broadcaster)
+# ------------------------------------------
+announcer:
+  enabled: true
+  # Interval in seconds between announcements
+  interval: 300
+  # Play a sound when an announcement is broadcasted?
+  sound: "ENTITY_EXPERIENCE_ORB_PICKUP"
+  # The messages to broadcast (supports MiniMessage formatting)
+  messages:
+    - "<prefix> <green>Welcome to our amazing server! Please read the rules.</green>"
+    - "<prefix> <aqua>Join our Discord community: <underlined><click:open_url:'https://discord.gg/example'>discord.gg/example</click></underlined></aqua>"
+    - "<prefix> <yellow>Don't forget to vote daily to receive free rewards!</yellow>"
