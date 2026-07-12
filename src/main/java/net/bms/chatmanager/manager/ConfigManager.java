@@ -10,6 +10,7 @@ public class ConfigManager {
     private ConfigWrapper mainConfig;
     private ConfigWrapper messagesConfig;
     private ConfigWrapper swearWordsConfig;
+    private ConfigWrapper announcementsConfig;
 
     public ConfigManager(Plugin plugin) {
         this.plugin = plugin;
@@ -25,9 +26,13 @@ public class ConfigManager {
 
         swearWordsConfig = new ConfigWrapper(plugin, "swear_words.yml");
         swearWordsConfig.reloadConfig();
+
+        announcementsConfig = new ConfigWrapper(plugin, "announcements.yml");
+        announcementsConfig.reloadConfig();
     }
 
     public ConfigWrapper getMain() { return mainConfig; }
     public ConfigWrapper getMessages() { return messagesConfig; }
     public ConfigWrapper getSwearWords() { return swearWordsConfig; }
+    public ConfigWrapper getAnnouncements() { return announcementsConfig; }
 }

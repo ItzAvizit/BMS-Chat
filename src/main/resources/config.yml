@@ -1,20 +1,11 @@
-# ==========================================
-# BMS-ChatManager Configuration
-# ==========================================
+# BMS-ChatManager Config
 
-# ------------------------------------------
-# General Features
-# ------------------------------------------
+# Mentions feature
 features:
-  # Enable the @mention system to ping players
   mentions_enabled: true
 
-# ------------------------------------------
-# Chat Formats
-# ------------------------------------------
-# You can use standard MiniMessage tags like <red>, <bold>, <gradient:#00c6ff:#0072ff> 
-# or legacy codes like &a or &#FF0000.
-# Available placeholders: <player>, <message>, %luckperms_prefix%, %luckperms_suffix%, %player_name% (and any PlaceholderAPI placeholder)
+# Chat formatting (MiniMessage, legacy &a/&#FF0000, PAPI support)
+# Placeholders: <player>, <message>, %luckperms_prefix%, %luckperms_suffix%, %player_name%
 formats:
   default:
     priority: 0
@@ -24,11 +15,7 @@ formats:
     permission: "chatmanager.format.admin"
     format: "<red>[Admin]</red> %luckperms_prefix%<player> <gray>»</gray> <message>"
 
-# ------------------------------------------
-# Chat Channels
-# ------------------------------------------
-# Define custom channels here. 
-# Global is the default channel. Staff and Admin are private channels.
+# Chat channels (Global, Staff, Admin)
 channels:
   global:
     format: "formats.default"
@@ -40,126 +27,64 @@ channels:
     format: "<dark_red>[Admin Chat]</dark_red> <player> <white>»</white> <message>"
     permission: "chatmanager.admin"
 
-# ------------------------------------------
-# Chat Filter
-# ------------------------------------------
+# Chat filter (swear_words.yml contains the blocked words list)
 filter:
   enabled: true
-  # What to replace bad words with
   replace_with: "***"
-  # Action to take when a player swears (none, warn, mute, kick)
-  enforcement_action: "warn"
-  # Note: The list of blocked words is now located in swear_words.yml!
+  enforcement_action: "warn" # Options: none, warn, mute, kick
 
-# ------------------------------------------
-# Discord Integration
-# ------------------------------------------
+# DiscordSRV integration
 discord:
   enabled: true
-  # Set to true to send chat to Discord via DiscordSRV
   sync_chat: true
-  # Channel routing (In-Game Channel -> Discord Channel Name)
   channels:
     global: "global"
     staff: "staff-chat"
     admin: "admin-chat"
-  # Webhook URL for rich embeds (leave blank to disable)
-  webhook_url: ""
+  webhook_url: "" # Discord Webhook for rich logs (leave blank to disable)
 
-# ------------------------------------------
-# Anti-Spam
-# ------------------------------------------
+# Anti-spam features
 spam:
   enabled: true
-  # Prevent players from sending the exact same message twice in a row
   prevent_identical: true
-  # Maximum percentage of uppercase letters allowed in a message (0-100)
   max_caps_percentage: 70
-  # Minimum message length before the caps filter applies
   min_message_length_for_caps: 5
 
-# ------------------------------------------
-# Anti-Advertisement
-# ------------------------------------------
+# Anti-advertisement features
 ads:
   enabled: true
-  # Block IPs (e.g. 192.168.0.1)
   block_ips: true
-  # Block Domains (e.g. someserver.com)
   block_domains: true
-  # Allowed domains that won't be blocked
   whitelist:
     - "yourserver.com"
     - "youtube.com"
 
-# ------------------------------------------
-# Chat Cooldowns
-# ------------------------------------------
+# Chat cooldowns (seconds)
 cooldowns:
   enabled: true
   default: 3
   vip: 1
 
-# ------------------------------------------
-# Sounds
-# ------------------------------------------
+# Sound settings
 sounds:
   mentions:
     enabled: true
-    # Sound name from Bukkit Sound enum (https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Sound.html)
-    sound: "ENTITY_EXPERIENCE_ORB_PICKUP"
+    sound: "ENTITY_EXPERIENCE_ORB_PICKUP" # Spigot sound name
     volume: 1.0
     pitch: 1.0
 
-# ------------------------------------------
-# Permissions Customization
-# ------------------------------------------
+# Chat format permissions
 permissions:
-  # Permission required to use colors (&a, <red>) in chat
   color: "chatmanager.color"
-  # Permission required to use hex colors (&#FF0000, <#FF0000>) in chat
   hex: "chatmanager.hex"
-  # Permission required to use gradients (<gradient:red:blue>) in chat
   gradient: "chatmanager.gradient"
 
-# ------------------------------------------
-# Grammar & Auto-Capitalization
-# ------------------------------------------
-grammar:
-  enabled: true
-  # Automatically capitalize the first letter of messages
-  capitalize: true
-  # Automatically add a period to the end of messages if missing
-  punctuation: true
-
-# ------------------------------------------
-# Local Chat Logging
-# ------------------------------------------
+# Chat logging to daily files (plugins/BMS-ChatManager/logs/)
 logs:
-  # Enable saving chat messages to plugins/BMS-ChatManager/logs/
   enabled: true
 
-# ------------------------------------------
-# Interactive Chat (Hover & Click)
-# ------------------------------------------
+# Interactive chat hover/click formatting
 interactive:
   enabled: true
-  # The text shown when a player hovers over someone's name in chat
   hover_text: "<gray>Click to message </gray><white>%player_name%</white>!"
-  # The command suggested when clicking a player's name
   click_command: "/msg %player_name% "
-
-# ------------------------------------------
-# Auto-Announcer (Broadcaster)
-# ------------------------------------------
-announcer:
-  enabled: true
-  # Interval in seconds between announcements
-  interval: 300
-  # Play a sound when an announcement is broadcasted?
-  sound: "ENTITY_EXPERIENCE_ORB_PICKUP"
-  # The messages to broadcast (supports MiniMessage formatting)
-  messages:
-    - "<prefix> <green>Welcome to our amazing server! Please read the rules.</green>"
-    - "<prefix> <aqua>Join our Discord community: <underlined><click:open_url:'https://discord.gg/example'>discord.gg/example</click></underlined></aqua>"
-    - "<prefix> <yellow>Don't forget to vote daily to receive free rewards!</yellow>"

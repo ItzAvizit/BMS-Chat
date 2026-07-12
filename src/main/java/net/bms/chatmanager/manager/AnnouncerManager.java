@@ -29,10 +29,10 @@ public class AnnouncerManager {
             task.cancel();
         }
 
-        this.enabled = plugin.getConfigManager().getMain().getConfig().getBoolean("announcer.enabled", true);
-        this.interval = plugin.getConfigManager().getMain().getConfig().getInt("announcer.interval", 300);
-        this.soundName = plugin.getConfigManager().getMain().getConfig().getString("announcer.sound", "ENTITY_EXPERIENCE_ORB_PICKUP");
-        this.messages = plugin.getConfigManager().getMain().getConfig().getStringList("announcer.messages");
+        this.enabled = plugin.getConfigManager().getAnnouncements().getConfig().getBoolean("announcer.enabled", true);
+        this.interval = plugin.getConfigManager().getAnnouncements().getConfig().getInt("announcer.interval", 300);
+        this.soundName = plugin.getConfigManager().getAnnouncements().getConfig().getString("announcer.sound", "ENTITY_EXPERIENCE_ORB_PICKUP");
+        this.messages = plugin.getConfigManager().getAnnouncements().getConfig().getStringList("announcer.messages");
 
         if (enabled && !messages.isEmpty() && interval > 0) {
             startTask();

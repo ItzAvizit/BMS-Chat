@@ -22,7 +22,6 @@ public class BMSChatManager extends JavaPlugin {
     private WebhookManager webhookManager;
     private LogManager logManager;
     private AnnouncerManager announcerManager;
-    private GrammarManager grammarManager;
 
     private LuckPermsHook luckPermsHook;
     private PlaceholderAPIHook placeholderAPIHook;
@@ -32,8 +31,27 @@ public class BMSChatManager extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        if (!getDescription().getAuthors().contains("Avizit_")) {
+            getLogger().severe("--------------------------------------------------");
+            getLogger().severe("BMS-ChatManager failed to load: License signature validation failed!");
+            getLogger().severe("Author 'Avizit_' has been removed or modified in plugin.yml!");
+            getLogger().severe("Please restore the original author to run this plugin.");
+            getLogger().severe("--------------------------------------------------");
+            getServer().getPluginManager().disablePlugin(this);
+            return;
+        }
+
         instance = this;
         
+        // Print ASCII Banner
+        getServer().getConsoleSender().sendMessage("§b ____  __  __ ____         ____ _           _   __  __                                 ");
+        getServer().getConsoleSender().sendMessage("§b| __ )|  \\/  / ___|       / ___| |__   __ _| |_|  \\/  | __ _ _ __   __ _  __ _  ___ _ __ ");
+        getServer().getConsoleSender().sendMessage("§b|  _ \\| |\\/| \\___ \\ _____| |   | '_ \\ / _` | __| |\\/| |/ _` | '_ \\ / _` |/ _` |/ _ \\ '__|");
+        getServer().getConsoleSender().sendMessage("§b| |_) | |  | |___) |_____| |___| | | | (_| | |_| |  | | (_| | | | | (_| | (_| |  __/ |   ");
+        getServer().getConsoleSender().sendMessage("§b|____/|_|  |_|____/       \\____|_| |_|\\__,_|\\__|_|  |_|\\__,_|_| |_|\\__,_|\\__, |\\___|_|   ");
+        getServer().getConsoleSender().sendMessage("§b                                                                         |___/          ");
+        getServer().getConsoleSender().sendMessage("§7                                 By §b§lAvizit_");
+
         // Setup Scheduler Adapter
         try {
             Class.forName("io.papermc.paper.threadedregions.RegionizedServer");
@@ -51,6 +69,7 @@ public class BMSChatManager extends JavaPlugin {
 
         // Initialize Managers
         adventureManager = new AdventureManager(this);
+
         configManager = new ConfigManager(this);
         formatManager = new FormatManager(this, configManager, luckPermsHook, placeholderAPIHook);
         channelManager = new ChannelManager(this, configManager);
@@ -61,7 +80,6 @@ public class BMSChatManager extends JavaPlugin {
         webhookManager = new WebhookManager(this);
         logManager = new LogManager(this);
         announcerManager = new AnnouncerManager(this);
-        grammarManager = new GrammarManager(this);
 
         // Register Listeners
         getServer().getPluginManager().registerEvents(new net.bms.chatmanager.listener.AsyncChatListenerLegacy(this), this);
@@ -111,7 +129,6 @@ public class BMSChatManager extends JavaPlugin {
     public WebhookManager getWebhookManager() { return webhookManager; }
     public LogManager getLogManager() { return logManager; }
     public AnnouncerManager getAnnouncerManager() { return announcerManager; }
-    public GrammarManager getGrammarManager() { return grammarManager; }
     public DiscordSRVHook getDiscordSRVHook() { return discordSRVHook; }
 
     public boolean isChatMuted() { return chatMuted; }

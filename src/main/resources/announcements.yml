@@ -1,0 +1,9 @@
+# BMS-ChatManager Announcements
+announcer:
+  enabled: false
+  interval: 300
+  sound: "ENTITY_EXPERIENCE_ORB_PICKUP"
+  messages:
+    - "<prefix> <green>Welcome to our amazing server! Please read the rules.</green>"
+    - "<prefix> <aqua>Join our Discord community: <underlined><click:open_url:'https://discord.gg/example'>discord.gg/example</click></underlined></aqua>"
+    - "<prefix> <yellow>Don't forget to vote daily to receive free rewards!</yellow>"

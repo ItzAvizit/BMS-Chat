@@ -97,10 +97,11 @@ public class FormatManager {
         format = format.replace("<message>", "<message_placeholder>");
         format = format.replace("<player>", "<player_placeholder>");
 
-        // Handle [item]
+        // Handle [item] (yield to InteractiveChat if present to avoid conflicts)
         String messageStr = message;
         net.kyori.adventure.text.minimessage.tag.resolver.TagResolver itemResolver = net.kyori.adventure.text.minimessage.tag.resolver.TagResolver.empty();
-        if (messageStr.contains("[item]") && player.hasPermission("chatmanager.item")) {
+        boolean hasInteractiveChat = org.bukkit.Bukkit.getPluginManager().isPluginEnabled("InteractiveChat");
+        if (!hasInteractiveChat && messageStr.contains("[item]") && player.hasPermission("chatmanager.item")) {
             org.bukkit.inventory.ItemStack item = player.getInventory().getItemInMainHand();
             if (item != null && !item.getType().isAir()) {
                 messageStr = messageStr.replace("[item]", "<item>");

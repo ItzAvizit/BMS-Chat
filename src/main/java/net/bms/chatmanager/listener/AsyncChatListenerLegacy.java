@@ -55,13 +55,12 @@ public class AsyncChatListenerLegacy implements Listener {
             return;
         }
 
-        // Auto-Grammar
-        message = plugin.getGrammarManager().applyGrammar(message);
-
         // Filter profanity
         String preFilterMessage = message;
         message = plugin.getFilterManager().filterMessage(player, message);
         boolean wasFiltered = !preFilterMessage.equals(message);
+        
+        event.setMessage(message);
         
         plugin.getFilterManager().logMessage(player, message);
         plugin.getCooldownManager().updateChatTime(player);
